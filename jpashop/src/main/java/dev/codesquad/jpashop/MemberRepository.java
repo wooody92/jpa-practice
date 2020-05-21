@@ -1,5 +1,6 @@
 package dev.codesquad.jpashop;
 
+import dev.codesquad.jpashop.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
