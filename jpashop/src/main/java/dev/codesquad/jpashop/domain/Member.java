@@ -12,14 +12,16 @@ import java.util.List;
 @Setter
 public class Member {
 
-    @Id @GeneratedValue
-    private Long id;
+  @Id
+  @GeneratedValue
+  @Column(name = "member_id")
+  private Long id;
 
-    private String name;
+  private String name;
 
-    @Embedded
-    private Address address;
+  @Embedded
+  private Address address;
 
-    @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
+  @OneToMany(mappedBy = "member")
+  private List<Order> orders = new ArrayList<>();
 }
