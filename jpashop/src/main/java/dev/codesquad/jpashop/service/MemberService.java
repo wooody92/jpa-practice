@@ -41,4 +41,15 @@ public class MemberService {
   public Member findOne(Long memberId) {
     return memberRepository.findOne(memberId);
   }
+
+
+  /**
+   * update member
+   * save 하지 않아도 Transactional commit 시 dirty checking 후 변경점 저장한다.
+   */
+  @Transactional
+  public void update(Long id, String name) {
+    Member member = memberRepository.findOne(id);
+    member.setName(name);
+  }
 }
