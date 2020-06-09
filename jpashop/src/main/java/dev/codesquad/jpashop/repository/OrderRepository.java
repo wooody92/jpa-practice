@@ -2,6 +2,7 @@ package dev.codesquad.jpashop.repository;
 
 import dev.codesquad.jpashop.domain.Order;
 import dev.codesquad.jpashop.domain.OrderSearch;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,6 @@ public class OrderRepository {
     // JPQL
     // JPA Criteria
     // ..
-    return null;
+    return new ArrayList<>();
   }
 }
