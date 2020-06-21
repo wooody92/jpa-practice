@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import org.aspectj.weaver.ast.Or;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "orders")
@@ -24,6 +25,7 @@ public class Order {
   @JoinColumn(name = "member_id")
   private Member member; //주문 회원
 
+  @BatchSize(size = 100)
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
   private List<OrderItem> orderItems = new ArrayList<>();
 

@@ -13,12 +13,14 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
 @Setter
+@BatchSize(size = 100)
 public abstract class Item {
 
   @Id

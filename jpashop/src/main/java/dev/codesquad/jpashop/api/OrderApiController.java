@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -69,8 +70,26 @@ public class OrderApiController {
         return result;
     }
 
+    /**
+     * V3.1 엔티티를 조회해서 DTO로 변환 페이징 고려
+     * - ToOne 관계만 우선 모두 페치 조인으로 최적화
+     * - 컬렉션 관계는
+     * hibernate.default_batch_fetch_size, @BatchSize로 최적화
+     */
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(
+        @RequestParam(value = "offset", defaultValue = "0") int offset,
+        @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
+        List<OrderDto> result = orders.stream()
+            .map(o -> new OrderDto(o))
+            .collect(Collectors.toList());
+        return result;
+    }
+
     @Data
     static class OrderDto {
+
         private Long orderId;
         private String name;
         private LocalDateTime orderDate; //주문시간
@@ -80,15 +99,18 @@ public class OrderApiController {
 
         public OrderDto(Order order) {
             orderId = order.getId();
-            name = order.getMember().getName(); orderDate = order.getOrderDate();
+            name = order.getMember().getName();
+            orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress(); orderItems = order.getOrderItems().stream()
-                .map(orderItem -> new OrderItemDto(orderItem)) .collect(Collectors.toList());
+            address = order.getDelivery().getAddress();
+            orderItems = order.getOrderItems().stream()
+                .map(orderItem -> new OrderItemDto(orderItem)).collect(Collectors.toList());
         }
     }
 
     @Data
     static class OrderItemDto {
+
         private String itemName;//상품 명
         private int orderPrice; //주문 가격
         private int count; //주문 수량
